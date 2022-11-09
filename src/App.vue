@@ -37,10 +37,10 @@
       <div class="showKeyboard" v-if="keyboard">
         <!-- Перебор массива и отображение кнопок с обработчиками событий и передаваемыми значениями -->
         <div class="buttonKeyboard">
-          <button v-for="num, index of buttonsKeyboard" :key="index" @click="passingValue(num)">
+          <button v-for="num, index of buttonsKeyboard" :key="index" @click="passingValue(num, true)">
             {{ num }}</button>
           <!-- Кнопка удаления вызываем метод DeleteValue -->
-          <button @click="deleteValue">Delete</button>
+          <button @click="passingValue">Delete</button>
         </div>
         <!-- Радио для выбора поля для ввода значения. -->
         <!-- !!!!! Я Привязал импут к переменной(activOperand) и дал ей значение Value/ При нажатии на радио значение в переменной меняется.-->
@@ -89,7 +89,7 @@ export default {
       //переменная для Отображение клавиатуры (скрыта)
       keyboard: false,
       //Переменная для определения в какой инпут нам записать значение
-      activOperand: 0,
+      activOperand: 1,
       // //Переменная для удаления значения
       // deleteValue: false,
     }
@@ -117,25 +117,38 @@ export default {
     //   this.activOperand = id;
     // },
 
-    // Передача значения в инпуты
-    passingValue(value) {
-      if (this.activOperand == 1) {
-        this.operand1 += value;
-      };
+    // Передаем значения в ипнут
+    //Смысл метода. При клики на кнопки к нам приходят 2 значения. 1.value и 2.(true/ false)=> isPassing.
+    //Пассинг у нас всегда true и мы заходим в первую проверку. Если мы нажали на другую кнопку то первую провекру мы не заходим. Нас пускает во торую к Удалению значения.
 
-      if (this.activOperand == 2) {
-        this.operand2 += value;
-      };
+    passingValue(value, isPassing) {
+      if (isPassing) {
+        if (this.activOperand == 1) {
+          this.operand1 += value;
+        };
+        if (this.activOperand == 2) {
+          this.operand2 += value;
+        }
+      } else {
+        if (this.activOperand == 1) {
+          // Метод splice извлекаем последнне значение ( первое значение это начало строки, воторое это конец нашей строке и от него отнимаем одно значение)
+          this.operand1 = this.operand1.slice(0, this.operand1.length - 1);
+        }
+        if (this.activOperand == 2) {
+          this.operand2 = this.operand2.slice(0, this.operand2.length - 1);
+        }
+      }
     },
+
     // Метод удаления.
-    deleteValue() {
-      if (this.activOperand == 1) {
-        this.operand1 = '';
-      }
-      if (this.activOperand == 2) {
-        this.operand2 = '';
-      }
-    },
+    // deleteValue() {
+    //   if (this.activOperand == 1) {
+    //     this.operand1 = '';
+    //   }
+    //   if (this.activOperand == 2) {
+    //     this.operand2 = '';
+    //   }
+    // },
 
     //Метод определения, что нужно выполнить в зависимости от того, что нажал пользователь
     eventCalc(operator) {
