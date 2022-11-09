@@ -39,6 +39,8 @@
         <div class="buttonKeyboard">
           <button v-for="num, index of buttonsKeyboard" :key="index" @click="passingValue(num)">
             {{ num }}</button>
+          <!-- Кнопка удаления вызываем метод DeleteValue -->
+          <button @click="deleteValue">Delete</button>
         </div>
         <!-- Радио для выбора поля для ввода значения. -->
         <!-- !!!!! Я Привязал импут к переменной(activOperand) и дал ей значение Value/ При нажатии на радио значение в переменной меняется.-->
@@ -83,15 +85,13 @@ export default {
       //Переменная которая нужна для добавления в обьект (Уточниить)
       lastKey: 0,
       //массив для Клавиатуры
-      buttonsKeyboard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'delete',],
-      //Массив хранения значения в левом блоке
-      leftValue: [],
-      //Массив хранения значения в правом блоке
-      rightValue: [],
+      buttonsKeyboard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,],
       //переменная для Отображение клавиатуры (скрыта)
       keyboard: false,
       //Переменная для определения в какой инпут нам записать значение
       activOperand: 0,
+      // //Переменная для удаления значения
+      // deleteValue: false,
     }
   },
   computed: {
@@ -120,16 +120,20 @@ export default {
     // Передача значения в инпуты
     passingValue(value) {
       if (this.activOperand == 1) {
-        if (value === 'delete') {
-          console.log('delete');
-        } else
-          this.operand1 += value;
+        this.operand1 += value;
+      };
+
+      if (this.activOperand == 2) {
+        this.operand2 += value;
+      };
+    },
+    // Метод удаления.
+    deleteValue() {
+      if (this.activOperand == 1) {
+        this.operand1 = '';
       }
       if (this.activOperand == 2) {
-        if (value === 'delete') {
-          console.log('delete')
-        } else
-          this.operand2 += value;
+        this.operand2 = '';
       }
     },
 
